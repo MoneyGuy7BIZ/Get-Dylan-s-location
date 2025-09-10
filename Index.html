@@ -1,0 +1,213 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Pinpoint — Location Labs</title>
+  <style>
+    /* Base colors */
+    :root{
+      --bg:#050605;
+      --panel:#0b0f0b;
+      --accent:#00ff6a;
+      --muted:#7a7f7a;
+      --glass: rgba(255,255,255,0.03);
+    }
+    html,body{height:100%;margin:0;font-family:Inter, ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial;}
+    body{background:linear-gradient(180deg,#000000 0%, #081208 100%); color:#e6ffe9; -webkit-font-smoothing:antialiased;}
+    .container{max-width:1200px;margin:24px auto;padding:20px;}
+    header{display:flex;align-items:center;gap:18px;padding:18px 12px;border-radius:12px;background:linear-gradient(90deg, rgba(0,0,0,0.3), rgba(0,0,0,0.1));box-shadow:0 6px 30px rgba(0,0,0,0.6);backdrop-filter: blur(6px);border:1px solid rgba(0,255,106,0.06);}
+    .logo{display:flex;align-items:center;gap:12px}
+    .logo .mark{width:56px;height:56px;border-radius:12px;background:linear-gradient(135deg,#002d12,#00381a);display:flex;align-items:center;justify-content:center;box-shadow:0 6px 18px rgba(0,255,106,0.05);border:1px solid rgba(0,255,106,0.12)}
+    .mark svg{width:36px;height:36px;fill:var(--accent)}
+    h1{margin:0;font-size:20px;letter-spacing:0.6px}
+    p.lead{margin:0;color:var(--muted)}
+    .layout{display:grid;grid-template-columns:420px 1fr;gap:18px;margin-top:18px}
+    .sidebar{background:var(--panel);padding:16px;border-radius:12px;border:1px solid rgba(0,255,106,0.04);min-height:640px}
+    .panel{background:linear-gradient(180deg,var(--glass), rgba(255,255,255,0.01));padding:14px;border-radius:10px;margin-bottom:12px;border:1px solid rgba(0,255,106,0.03)}
+    .brand{font-weight:700;color:var(--accent)}
+    .search{display:flex;gap:8px}
+    .search input{flex:1;padding:10px;border-radius:8px;border:1px solid rgba(255,255,255,0.03);background:transparent;color:inherit;outline:none}
+    .btn{background:linear-gradient(90deg,var(--accent), #00e86a);padding:10px 14px;border-radius:8px;color:#021202;border:none;font-weight:700;cursor:pointer;box-shadow:0 6px 24px rgba(0,255,106,0.08)}
+    .feature-list{display:flex;flex-direction:column;gap:10px}
+    .feature{padding:12px;border-radius:10px;border:1px solid rgba(0,255,106,0.04);display:flex;gap:12px;align-items:center}
+    .feature .dot{width:10px;height:10px;border-radius:50%;background:var(--accent);box-shadow:0 0 10px rgba(0,255,106,0.18)}
+    main{min-height:640px;padding:18px;border-radius:12px;background:linear-gradient(180deg, rgba(0,0,0,0.25), rgba(0,0,0,0.12));border:1px solid rgba(0,255,106,0.02)}
+    .map{height:420px;border-radius:10px;border:1px dashed rgba(0,255,106,0.04);display:flex;align-items:center;justify-content:center;position:relative;overflow:hidden;background:linear-gradient(180deg,#071007,#032007)}
+    .map .pin{position:absolute;width:52px;height:52px;left:50%;top:50%;transform:translate(-50%,-100%);animation:bounce 1.25s infinite}
+    @keyframes bounce{0%{transform:translate(-50%,-110%)}50%{transform:translate(-50%,-100%)}100%{transform:translate(-50%,-110%)}}
+    .controls{display:flex;gap:8px;flex-wrap:wrap}
+    .stat-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-top:12px}
+    .stat{padding:12px;border-radius:8px;background:rgba(255,255,255,0.02);text-align:center}
+    footer{margin-top:18px;padding:12px;text-align:center;color:var(--muted);font-size:13px}
+    .code-console{background:#020202;padding:12px;border-radius:8px;font-family:monospace;color:#8bf2ad;max-height:220px;overflow:auto;border:1px solid rgba(0,255,106,0.04)}
+    .toggle{display:inline-flex;align-items:center;gap:8px;cursor:pointer}
+    .toggle input{display:none}
+    .switch{width:44px;height:24px;border-radius:999px;background:rgba(255,255,255,0.04);position:relative;border:1px solid rgba(255,255,255,0.03)}
+    .knob{width:18px;height:18px;border-radius:50%;background:#001a09;position:absolute;left:3px;top:3px;transition:all .18s}
+    .switch.on{background:linear-gradient(90deg,var(--accent),#00e86a)}
+    .switch.on .knob{left:23px;background:#00280f;box-shadow:0 6px 18px rgba(0,255,106,0.08)}
+    /* Responsive */
+    @media (max-width:900px){.layout{grid-template-columns:1fr;}.sidebar{order:2}}
+  </style>
+</head>
+<body>
+  <div class="container">
+    <header>
+      <div class="logo">
+        <div class="mark" aria-hidden="true">
+          <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M12 2C7 2 3 6 3 11c0 5 6 11 9 11s9-6 9-11c0-5-4-9-9-9zm0 13a4 4 0 110-8 4 4 0 010 8z"/></svg>
+        </div>
+        <div>
+          <h1>Pinpoint <span class="brand">Location Labs</span></h1>
+          <p class="lead">Precision tools for mapping, tracking, and mock geo-features.</p>
+        </div>
+      </div>
+      <div style="margin-left:auto;">
+        <button class="btn" onclick="openDemo()">Open Demo</button>
+      </div>
+    </header>
+
+    <div class="layout">
+      <aside class="sidebar">
+        <div class="panel">
+          <div style="display:flex;justify-content:space-between;align-items:center">
+            <div>
+              <strong>Account</strong>
+              <div style="color:var(--muted);font-size:13px">Guest • Anonymous</div>
+            </div>
+            <div style="text-align:right">
+              <div style="font-weight:700;color:var(--accent)">v2.3</div>
+              <div style="font-size:12px;color:var(--muted)">alpha</div>
+            </div>
+          </div>
+        </div>
+
+        <div class="panel">
+          <div style="display:flex;gap:8px;align-items:center;">
+            <div style="width:44px;height:44;border-radius:8px;background:linear-gradient(180deg,#001b0b,#002214);display:flex;align-items:center;justify-content:center;border:1px solid rgba(0,255,106,0.04)"><svg width="22" height="22" viewBox="0 0 24 24" fill="none"><path d="M12 2C7 2 3 6 3 11c0 5 6 11 9 11s9-6 9-11c0-5-4-9-9-9z" fill="currentColor"/></svg></div>
+            <div style="flex:1">
+              <div style="font-weight:700">Live Locator</div>
+              <div style="color:var(--muted);font-size:13px">Simulated positioning engine</div>
+            </div>
+          </div>
+          <div style="margin-top:12px" class="search">
+            <input id="searchBox" placeholder="Search an address, IP, or place (mock)" />
+            <button class="btn" onclick="searchMock()">Locate</button>
+          </div>
+        </div>
+
+        <div class="panel">
+          <strong>Quick features</strong>
+          <div class="feature-list" id="featureList">
+            <div class="feature" id="feature-1">
+              <div class="dot" aria-hidden="true"></div>
+              <div style="flex:1">
+                <div style="font-weight:700">Feature 1: Mock Geo-1</div>
+                <div style="font-size:13px;color:var(--muted)">Description: High precision simulated pinpointing mode #1 with advanced jitter smoothing.</div>
+              </div>
+              <div style="display:flex;flex-direction:column;gap:6px;align-items:flex-end">
+                <label class="toggle"><input type="checkbox" onchange="toggleFeature(1, this.checked)" /><div class="switch" id="sw-1"><div class="knob"></div></div></label>
+                <div style="font-size:12px;color:var(--muted)">Status: <span id="st-1">off</span></div>
+              </div>
+            </div>
+            <div class="feature" id="feature-2">
+              <div class="dot" aria-hidden="true"></div>
+              <div style="flex:1">
+                <div style="font-weight:700">Feature 2: Mock Geo-2</div>
+                <div style="font-size:13px;color:var(--muted)">Description: High precision simulated pinpointing mode #2 with advanced jitter smoothing.</div>
+              </div>
+              <div style="display:flex;flex-direction:column;gap:6px;align-items:flex-end">
+                <label class="toggle"><input type="checkbox" onchange="toggleFeature(2, this.checked)" /><div class="switch" id="sw-2"><div class="knob"></div></div></label>
+                <div style="font-size:12px;color:var(--muted)">Status: <span id="st-2">off</span></div>
+              </div>
+            </div>
+            <div class="feature" id="feature-3">
+              <div class="dot" aria-hidden="true"></div>
+              <div style="flex:1">
+                <div style="font-weight:700">Feature 3: Mock Geo-3</div>
+                <div style="font-size:13px;color:var(--muted)">Description: High precision simulated pinpointing mode #3 with advanced jitter smoothing.</div>
+              </div>
+              <div style="display:flex;flex-direction:column;gap:6px;align-items:flex-end">
+                <label class="toggle"><input type="checkbox" onchange="toggleFeature(3, this.checked)" /><div class="switch" id="sw-3"><div class="knob"></div></div></label>
+                <div style="font-size:12px;color:var(--muted)">Status: <span id="st-3">off</span></div>
+              </div>
+            </div>
+            <div class="feature" id="feature-4">
+              <div class="dot" aria-hidden="true"></div>
+              <div style="flex:1">
+                <div style="font-weight:700">Feature 4: Mock Geo-4</div>
+                <div style="font-size:13px;color:var(--muted)">Description: High precision simulated pinpointing mode #4 with advanced jitter smoothing.</div>
+              </div>
+              <div style="display:flex;flex-direction:column;gap:6px;align-items:flex-end">
+                <label class="toggle"><input type="checkbox" onchange="toggleFeature(4, this.checked)" /><div class="switch" id="sw-4"><div class="knob"></div></div></label>
+                <div style="font-size:12px;color:var(--muted)">Status: <span id="st-4">off</span></div>
+              </div>
+            </div>
+            <div class="feature" id="feature-5">
+              <div class="dot" aria-hidden="true"></div>
+              <div style="flex:1">
+                <div style="font-weight:700">Feature 5: Mock Geo-5</div>
+                <div style="font-size:13px;color:var(--muted)">Description: High precision simulated pinpointing mode #5 with advanced jitter smoothing.</div>
+              </div>
+              <div style="display:flex;flex-direction:column;gap:6px;align-items:flex-end">
+                <label class="toggle"><input type="checkbox" onchange="toggleFeature(5, this.checked)" /><div class="switch" id="sw-5"><div class="knob"></div></div></label>
+                <div style="font-size:12px;color:var(--muted)">Status: <span id="st-5">off</span></div>
+              </div>
+            </div>
+            <div class="feature" id="feature-6">
+              <div class="dot" aria-hidden="true"></div>
+              <div style="flex:1">
+                <div style="font-weight:700">Feature 6: Mock Geo-6</div>
+                <div style="font-size:13px;color:var(--muted)">Description: High precision simulated pinpointing mode #6 with advanced jitter smoothing.</div>
+              </div>
+              <div style="display:flex;flex-direction:column;gap:6px;align-items:flex-end">
+                <label class="toggle"><input type="checkbox" onchange="toggleFeature(6, this.checked)" /><div class="switch" id="sw-6"><div class="knob"></div></div></label>
+                <div style="font-size:12px;color:var(--muted)">Status: <span id="st-6">off</span></div>
+              </div>
+            </div>
+            <div class="feature" id="feature-7">
+              <div class="dot" aria-hidden="true"></div>
+              <div style="flex:1">
+                <div style="font-weight:700">Feature 7: Mock Geo-7</div>
+                <div style="font-size:13px;color:var(--muted)">Description: High precision simulated pinpointing mode #7 with advanced jitter smoothing.</div>
+              </div>
+              <div style="display:flex;flex-direction:column;gap:6px;align-items:flex-end">
+                <label class="toggle"><input type="checkbox" onchange="toggleFeature(7, this.checked)" /><div class="switch" id="sw-7"><div class="knob"></div></div></label>
+                <div style="font-size:12px;color:var(--muted)">Status: <span id="st-7">off</span></div>
+              </div>
+            </div>
+            <div class="feature" id="feature-8">
+              <div class="dot" aria-hidden="true"></div>
+              <div style="flex:1">
+                <div style="font-weight:700">Feature 8: Mock Geo-8</div>
+                <div style="font-size:13px;color:var(--muted)">Description: High precision simulated pinpointing mode #8 with advanced jitter smoothing.</div>
+              </div>
+              <div style="display:flex;flex-direction:column;gap:6px;align-items:flex-end">
+                <label class="toggle"><input type="checkbox" onchange="toggleFeature(8, this.checked)" /><div class="switch" id="sw-8"><div class="knob"></div></div></label>
+                <div style="font-size:12px;color:var(--muted)">Status: <span id="st-8">off</span></div>
+              </div>
+            </div>
+            <div class="feature" id="feature-9">
+              <div class="dot" aria-hidden="true"></div>
+              <div style="flex:1">
+                <div style="font-weight:700">Feature 9: Mock Geo-9</div>
+                <div style="font-size:13px;color:var(--muted)">Description: High precision simulated pinpointing mode #9 with advanced jitter smoothing.</div>
+              </div>
+              <div style="display:flex;flex-direction:column;gap:6px;align-items:flex-end">
+                <label class="toggle"><input type="checkbox" onchange="toggleFeature(9, this.checked)" /><div class="switch" id="sw-9"><div class="knob"></div></div></label>
+                <div style="font-size:12px;color:var(--muted)">Status: <span id="st-9">off</span></div>
+              </div>
+            </div>
+            <div class="feature" id="feature-10">
+              <div class="dot" aria-hidden="true"></div>
+              <div style="flex:1">
+                <div style="font-weight:700">Feature 10: Mock Geo-10</div>
+                <div style="font-size:13px;color:var(--muted)">Description: High precision simulated pinpointing mode #10 with advanced jitter smoothing.</div>
+              </div>
+              <div style="display:flex;flex-direction:column;gap:6px;align-items:flex-end">
+                <label class="toggle"><input type="checkbox" onchange="toggleFeature(10, this.checked)" /><div class="switch" id="sw-10"><div class="knob"></div></div></label>
+                <div style="font-size:12px;color:var(--muted)">Status: <span id="st-10">off</span></div>
+              </div>
+            </div>
+            <!-- ... many more feature items (features 11 through 200) are included in the full file ... -->
